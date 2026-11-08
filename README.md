@@ -23,3 +23,9 @@
 
 - Code.gs: ฝั่งเซิร์ฟเวอร์และการเชื่อม Google Sheets
 - Index.html: หน้าผู้ใช้และ dashboard
+
+## เว็บไซต์ GitHub Pages
+
+https://sureeratmph13.github.io/mosquito-calendar-plus/
+
+เผยแพร่จาก main โฟลเดอร์ /docs หน้านี้เป็นหน้าเข้าใช้งานพร้อมปุ่มเปิดเว็บแอป Apps Script เดิม การอ่านและบันทึกข้อมูลยังทำบนแอปเดิม ไม่ได้ย้ายหน้าฟอร์มหรือ API มารันบน GitHub Pages และไม่ได้อัปเดต deployment เดิมโดยอัตโนมัติ
