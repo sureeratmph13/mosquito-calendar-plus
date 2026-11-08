@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ปฏิทินกันยุงออนไลน์</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700&family=Sarabun:wght@400;600;700&display=swap">
+<style>
+:root{
+  --bg:#F2F8FF; --surface:#FFFFFF; --surface-2:#EAF3FE; --line:#CBDDF2;
+  --fg:#10233B; --muted:#4A5C73;
+  --accent:#0A62C9; --accent-ink:#FFFFFF; --accent-soft:#DCEBFF;
+  --band:#0A62C9; --band-2:#0B4FA3; --sun:#FFC928; --sun-ink:#3A2A00;
+  --good:#0E8043; --good-soft:#DDF5E7; --warn:#D23F0A; --warn-soft:#FFE9DE;
+  --c-pid:#0A62C9; --c-plian:#0372B0; --c-ploi:#0B7C73; --c-prab:#2A7A1B; --c-patibat:#7246D1; --c-khat:#D23F0A;
+  --c-hi:#D23F0A; --c-ci:#7246D1; --c-rep:#B26A00; --c-full:#0E8043;
+  --tint:12%; --lift:0%;
+  --display:'Prompt',Tahoma,sans-serif; --body:'Sarabun',Tahoma,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0C1522; --surface:#142133; --surface-2:#1A2A40; --line:#2C4260;
+  --fg:#EAF2FC; --muted:#A6B6CA; --accent:#6CB2FF; --accent-ink:#06213F; --accent-soft:#16304F;
+  --band:#123E73; --band-2:#0E2F58; --good:#4FD18B; --good-soft:#123326; --warn:#FF8F5E; --warn-soft:#3B1E12;
+  --tint:22%; --lift:55%; color-scheme:dark }}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:980px;margin:0 auto;padding:18px 16px 48px;display:flex;flex-direction:column;gap:16px}
+h1,h2,h3{font-family:var(--display);margin:0}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.hero{position:relative;overflow:hidden;background:var(--band);color:#fff;border-radius:20px;padding:18px;display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center;justify-content:space-between}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:var(--band-2)}
+.hero>*{position:relative;z-index:1}
+.brand{display:flex;gap:14px;align-items:center;flex:1 1 340px;min-width:0}
+.seal{width:84px;height:84px;flex-shrink:0;border-radius:50%;background:#fff;padding:3px;box-shadow:0 0 0 4px var(--sun),0 6px 14px rgba(0,0,0,.2)}
+.eyebrow{font-family:var(--display);font-weight:600;font-size:14px;color:var(--sun)}
+.hero h1{font-size:clamp(28px,6vw,40px);line-height:1.1}
+.hl{background:var(--sun);color:var(--sun-ink);padding:0 8px;border-radius:6px;font-weight:700}
+.monthbar{display:flex;align-items:center;gap:4px;background:var(--surface);color:var(--fg);border-radius:12px;padding:4px;box-shadow:0 6px 16px rgba(0,0,0,.15)}
+.monthbar output{font-family:var(--display);font-weight:600;min-width:150px;text-align:center;font-size:17px}
+.icon-btn{width:44px;height:44px;border:0;border-radius:9px;background:transparent;display:grid;place-items:center}
+.icon-btn:hover{background:var(--surface-2)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.input{height:48px;border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:0 14px;font-size:18px;min-width:0}
+.btn{min-height:48px;border-radius:12px;border:2px solid var(--accent);background:var(--accent);color:var(--accent-ink);padding:0 18px;font-weight:700;font-family:var(--display);font-size:16px}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.big{width:100%;min-height:56px;font-size:19px}
+.btn:disabled{opacity:.55;cursor:wait}
+.hint{font-size:14px;color:var(--muted)}
+.msg{border-radius:10px;padding:10px 14px;background:var(--warn-soft);border:1px solid var(--warn)}
+.msg.ok{background:var(--good-soft);border-color:var(--good)}
+
+.fridays{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+.fri{flex:1 0 112px;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 10px;text-align:left;display:flex;flex-direction:column;gap:2px;min-height:62px}
+.fri .d{font-family:var(--display);font-weight:600;font-size:15px}
+.fri .h{font-size:13px;color:var(--muted)}
+.fri[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.fri[aria-pressed="true"] .h{color:var(--accent-ink)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;background:var(--line)}
+.dot.ok{background:var(--good)} .dot.bad{background:var(--warn)} .dot.part{background:var(--c-rep)}
+
+.measures{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media (min-width:700px){.measures{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.m{--c:var(--accent);min-height:72px;border-radius:12px;border:2px solid color-mix(in srgb,var(--c) 40%,var(--surface));background:color-mix(in srgb,var(--c) var(--tint),var(--surface));color:color-mix(in srgb,var(--c),#fff var(--lift));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-family:var(--display);font-weight:700;font-size:17px;padding:6px 4px;line-height:1.2}
+.m small{font-family:var(--body);font-weight:400;font-size:12px;opacity:.9}
+.m .tick{width:22px;height:22px;border:2.5px solid currentColor;border-radius:6px;display:grid;place-items:center}
+.m .tick svg{opacity:0}
+.m[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff}
+.m[aria-pressed="true"] .tick{background:#fff;border-color:#fff}
+.m[aria-pressed="true"] .tick svg{opacity:1}
+.m[aria-pressed="true"] .tick path{stroke:var(--c)}
+.m-pid{--c:var(--c-pid)}.m-plian{--c:var(--c-plian)}.m-ploi{--c:var(--c-ploi)}.m-prab{--c:var(--c-prab)}.m-patibat{--c:var(--c-patibat)}.m-khat{--c:var(--c-khat)}
+.counts{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.num{display:flex;align-items:center;gap:8px;font-size:15px}
+.num input{width:84px;height:48px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);text-align:center;font-size:20px}
+.num.larva input{border-color:var(--warn)}
+.vhv{margin-left:auto;min-height:44px;border-radius:10px;border:1.5px dashed var(--line);background:transparent;padding:0 12px;font-size:14px}
+.vhv[aria-pressed="true"]{border-style:solid;border-color:var(--accent);background:var(--accent-soft);color:var(--accent);font-weight:700}
+
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stat{--c:var(--accent);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;background:color-mix(in srgb,var(--c) var(--tint),var(--surface));border:1px solid color-mix(in srgb,var(--c) 30%,var(--surface));min-width:0}
+.stat .k{font-size:13px;font-weight:600;display:flex;gap:6px;align-items:center}
+.stat .k::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--c);flex-shrink:0}
+.stat .v{font-family:var(--display);font-weight:700;font-size:30px;line-height:1.15;color:color-mix(in srgb,var(--c),#fff var(--lift))}
+.s-hi{--c:var(--c-hi)}.s-ci{--c:var(--c-ci)}.s-rep{--c:var(--c-rep)}.s-full{--c:var(--c-full)}
+.pill{align-self:flex-start;font-size:12px;font-weight:700;border-radius:999px;padding:1px 9px;background:var(--surface);color:var(--muted)}
+.pill.ok{background:var(--good-soft);color:var(--good)} .pill.bad{background:var(--warn-soft);color:var(--warn)}
+
+.chip{height:40px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:0 14px;font-size:14px}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.list{display:flex;flex-direction:column;gap:10px}
+.house{background:var(--surface);border:1px solid var(--line);border-left:8px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.house.st-ok{border-left-color:var(--good);background:color-mix(in srgb,var(--good) 5%,var(--surface))}
+.house.st-bad{border-left-color:var(--warn);background:color-mix(in srgb,var(--warn) 6%,var(--surface))}
+.house.st-part{border-left-color:var(--c-rep)}
+.hhead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;align-items:baseline}
+.hno{font-family:var(--display);font-weight:700;font-size:19px}
+.hname{color:var(--muted);font-size:15px}
+.hstate{font-size:13px;font-weight:700}
+.st-ok .hstate{color:var(--good)}.st-bad .hstate{color:var(--warn)}.st-part .hstate{color:var(--c-rep)}.st-none .hstate{color:var(--muted)}
+.house .m{min-height:52px;font-size:15px}
+
+.alert{background:var(--warn-soft);border:2px solid var(--warn);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.alert h3{color:var(--warn);font-size:18px}
+.alert ul{margin:0;padding-left:20px}
+details.manage{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 14px}
+details.manage summary{cursor:pointer;font-family:var(--display);font-weight:600;min-height:44px;display:flex;align-items:center}
+.mgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:6px 0 14px}
+@media (max-width:700px){.mgrid{grid-template-columns:minmax(0,1fr)}}
+.field{display:flex;flex-direction:column;gap:4px;font-size:14px}
+.field input,.field textarea{border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:10px 12px;min-height:44px}
+.field textarea{min-height:120px;resize:vertical}
+.del-row{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;padding:3px 0}
+.del-row button{height:36px;border-radius:8px;border:1px solid var(--line);background:transparent;padding:0 10px;font-size:13px}
+.del-row button.confirm{background:var(--warn);border-color:var(--warn);color:#fff}
+.foot{font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
+.linkbtn{background:none;border:0;color:var(--accent);text-decoration:underline;padding:8px 0;font-size:14px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:var(--fg);color:var(--bg);padding:12px 18px;border-radius:12px;font-size:15px;max-width:calc(100% - 32px);z-index:5}
+.loading{opacity:.6;pointer-events:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="brand">
+      <img class="seal" src="data:image/jpeg;base64,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" alt="ตรา อสม.">
+      <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+        <div class="eyebrow">อสม. หมู่ 5 บ้านจีต · รพ.สต.บ้านจีต</div>
+        <h1>ปฏิทินกันยุงออนไลน์</h1>
+        <div>ทุก <span class="hl">วันศุกร์</span> สำรวจบ้าน แล้วติ๊ก 5ป.1ข. ให้ครบ</div>
+      </div>
+    </div>
+    <div class="monthbar" role="group" aria-label="เลือกเดือน">
+      <button class="icon-btn" id="prevM" aria-label="เดือนก่อน"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <output id="monthLabel">—</output>
+      <button class="icon-btn" id="nextM" aria-label="เดือนถัดไป"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+  </header>
+
+  <!-- ===== โหมดเจ้าของบ้าน ===== -->
+  <main id="homeView" style="display:flex;flex-direction:column;gap:16px">
+    <section class="panel" id="pickPanel">
+      <h2 style="font-size:20px">บ้านของฉัน</h2>
+      <form class="row" id="pickForm">
+        <label for="houseNo" class="hint" style="width:100%">พิมพ์บ้านเลขที่ของคุณ</label>
+        <input class="input" id="houseNo" inputmode="text" autocomplete="off" placeholder="เช่น 12 หรือ 13/1" style="flex:1 1 180px">
+        <button class="btn" type="submit" id="pickBtn">เปิดปฏิทินบ้านฉัน</button>
+      </form>
+      <div class="msg" id="pickMsg" hidden></div>
+    </section>
+
+    <section class="panel" id="myPanel" hidden>
+      <div class="hhead">
+        <div><span class="hno" id="myNo"></span> <span class="hname" id="mySum"></span></div>
+        <button class="linkbtn" id="changeHouse" type="button">เปลี่ยนบ้าน</button>
+      </div>
+      <div class="fridays" id="myFridays"></div>
+      <h3 style="font-size:17px" id="myFriLabel"></h3>
+      <div class="measures" id="myMeasures"></div>
+      <div class="counts">
+        <label class="num">ภาชนะที่สำรวจ <input id="myCont" type="number" min="0" inputmode="numeric"> ใบ</label>
+        <label class="num larva">พบลูกน้ำ <input id="myLarv" type="number" min="0" inputmode="numeric"> ใบ</label>
+      </div>
+      <button class="btn big" id="mySave" type="button">บันทึกผลวันศุกร์นี้</button>
+      <div class="msg" id="myMsg" hidden></div>
+    </section>
+
+    <section class="alert">
+      <h3>สงสัยไข้เลือดออก รีบพบ อสม. / รพ.สต.</h3>
+      <ul>
+        <li>ไข้สูงลอย 2 วันขึ้นไป ปวดศีรษะ ปวดเมื่อยตัว หน้าแดง</li>
+        <li>มีจุดเลือดออกตามผิวหนัง เลือดกำเดาไหล</li>
+        <li>ไข้ลดแต่ซึม อ่อนเพลีย ปวดท้อง มือเท้าเย็น <b>อันตราย!</b></li>
+      </ul>
+      <b>ห้ามกินยาแอสไพริน / ไอบูโพรเฟน · เช็ดตัวลดไข้ กินพาราเซตามอลได้</b>
+    </section>
+  </main>
+
+  <!-- ===== โหมด อสม. ===== -->
+  <main id="adminView" hidden style="display:flex;flex-direction:column;gap:16px">
+    <section class="panel" id="loginPanel">
+      <h2 style="font-size:20px">สำหรับ อสม. และเจ้าหน้าที่</h2>
+      <form class="row" id="loginForm">
+        <label for="pin" class="hint" style="width:100%">ใส่รหัส อสม. หรือรหัสผ่านเจ้าหน้าที่ เพื่อดูภาพรวมทั้งหมู่บ้าน</label>
+        <input class="input" id="pin" type="password" autocomplete="off" style="flex:1 1 160px">
+        <button class="btn" type="submit" id="loginBtn">เข้าสู่ระบบ</button>
+      </form>
+      <div class="msg" id="loginMsg" hidden></div>
+    </section>
+
+    <div id="dash" hidden style="display:flex;flex-direction:column;gap:16px">
+      <div class="row" style="justify-content:space-between"><span class="pill ok" id="roleBadge" style="font-size:14px;padding:4px 12px">—</span></div>
+      <div class="fridays" id="admFridays"></div>
+      <section class="stats" aria-label="สรุปสัปดาห์ที่เลือก">
+        <div class="stat s-hi"><span class="k">ค่า HI (บ้านที่พบลูกน้ำ)</span><span class="v" id="sHI">—</span><span class="pill" id="pHI">เป้าหมาย 0</span></div>
+        <div class="stat s-ci"><span class="k">ค่า CI (ภาชนะที่พบลูกน้ำ)</span><span class="v" id="sCI">—</span><span class="pill" id="pCI">เป้าหมาย 0</span></div>
+        <div class="stat s-rep"><span class="k">บ้านที่รายงานแล้ว</span><span class="v" id="sRep">—</span><span class="pill" id="pRep">—</span></div>
+        <div class="stat s-full"><span class="k">ทำครบ 5ป.1ข.</span><span class="v" id="sFull">—</span><span class="pill">ของบ้านที่รายงาน</span></div>
+      </section>
+      <div class="row">
+        <input class="input" id="q" type="search" placeholder="ค้นหาบ้านเลขที่ ชื่อ หรือ อสม." aria-label="ค้นหาบ้าน" style="flex:1 1 220px;height:44px;font-size:16px">
+        <button class="chip" data-f="all" aria-pressed="true">ทั้งหมด</button>
+        <button class="chip" data-f="none" aria-pressed="false">ยังไม่รายงาน</button>
+        <button class="chip" data-f="bad" aria-pressed="false">พบลูกน้ำ</button>
+        <button class="chip" data-f="ok" aria-pressed="false">ปลอดลูกน้ำ</button>
+      </div>
+      <section class="list" id="list"></section>
+      <div class="msg" id="emptyMsg" hidden>ยังไม่มีรายชื่อบ้าน เพิ่มได้ในส่วน "จัดการรายชื่อบ้าน" ด้านล่าง หรือวางรายชื่อในแผ่นงาน "รายชื่อบ้าน" ของ Google Sheets</div>
+      <details class="manage" id="manage">
+        <summary>จัดการรายชื่อบ้าน</summary>
+        <div class="mgrid">
+          <form class="field" id="addOne" style="gap:8px">
+            <b>เพิ่มทีละหลัง</b>
+            <label class="field">บ้านเลขที่<input id="fNo" required autocomplete="off"></label>
+            <label class="field">ชื่อเจ้าบ้าน<input id="fName" autocomplete="off"></label>
+            <label class="field">อสม. ผู้ดูแล<input id="fVhv" autocomplete="off"></label>
+            <button class="btn" type="submit">เพิ่มบ้าน</button>
+          </form>
+          <form class="field" id="addMany" style="gap:8px">
+            <b>วางรายชื่อหลายหลัง</b>
+            <label class="field">หนึ่งบรรทัดต่อหนึ่งบ้าน: บ้านเลขที่, ชื่อเจ้าบ้าน, อสม.
+              <textarea id="fMany" placeholder="บ้านตัวอย่าง A, เจ้าบ้านตัวอย่าง A, ผู้ดูแลตัวอย่าง&#10;บ้านตัวอย่าง B, เจ้าบ้านตัวอย่าง B, ผู้ดูแลตัวอย่าง"></textarea></label>
+            <span class="hint">คัดลอกจาก Excel มาวางได้เลย บ้านเลขที่ที่มีแล้วจะถูกข้าม</span>
+            <button class="btn" type="submit">เพิ่มทั้งหมด</button>
+          </form>
+        </div>
+        <div id="delList" style="max-height:260px;overflow:auto;border-top:1px solid var(--line);padding:8px 0 14px"></div>
+      </details>
+      <div class="row"><a class="btn ghost" id="sheetLink" href="#" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;text-decoration:none">เปิดข้อมูลใน Google Sheets</a>
+        <button class="btn ghost" id="logout" type="button">ออกจากระบบ</button></div>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <span>HI = บ้านที่พบลูกน้ำ ÷ บ้านที่สำรวจ × 100 · CI = ภาชนะที่พบลูกน้ำ ÷ ภาชนะที่สำรวจ × 100</span>
+    <button class="linkbtn" id="modeBtn" type="button">สำหรับ อสม. / เจ้าหน้าที่</button>
+  </footer>
+</div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(function(){
+  var MEAS=[["pid","ปิด","ฝาภาชนะ"],["plian","เปลี่ยน","น้ำทุก 7 วัน"],["ploi","ปล่อย","ปลากินลูกน้ำ"],["prab","ปรับ","เก็บขยะ"],["patibat","ปฏิบัติ","ทุกสัปดาห์"],["khat","ขัด","ไข่ยุง"]];
+  var TH_M=["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+  var TH_MS=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+  var TICK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>';
+  function $(id){return document.getElementById(id)}
+  function pad(n){return String(n).padStart(2,"0")}
+  function ymd(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+  function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+  function toast(t){var x=$("toast");x.textContent=t;x.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){x.hidden=true},2800)}
+  function show(id,text,ok){var m=$(id);m.textContent=text;m.className="msg"+(ok?" ok":"");m.hidden=!text}
+  function call(fn){var args=[].slice.call(arguments,1);return new Promise(function(res,rej){var r=google.script.run.withSuccessHandler(res).withFailureHandler(function(e){rej(e&&e.message?e.message:String(e))});r[fn].apply(r,args)})}
+  function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+
+  var now=new Date(),Y=now.getFullYear(),M=now.getMonth(),selFri=null;
+  var mode="home",myNo=null,myChecks={},pin=null,houses=[],checks={},filter="all",query="";
+  var cards={},timers={};
+
+  function monthKey(){return Y+"-"+pad(M+1)}
+  function fridays(){var o=[],d=new Date(Y,M,1);while(d.getMonth()===M){if(d.getDay()===5)o.push(ymd(d));d.setDate(d.getDate()+1)}return o}
+  function pickFri(){var fs=fridays(),t=ymd(new Date()),p=fs[0];fs.forEach(function(f){if(f<=t)p=f});selFri=p}
+  function reported(e){return !!e&&(MEAS.some(function(m){return e[m[0]]})||Number(e.containers)>0)}
+  function stateOf(e){if(!reported(e))return"none";if(Number(e.larvae)>0)return"bad";if(MEAS.every(function(m){return e[m[0]]}))return"ok";return"part"}
+  function friLabel(f){return "ศุกร์ "+Number(f.slice(8))+" "+TH_MS[M]}
+  function fmt(v){return v===null?"—":String(Math.round(v*100)/100)}
+
+  function buildMeasures(box,getE,onChange){
+    box.textContent="";var btns={};
+    MEAS.forEach(function(m){
+      var b=el("button","m m-"+m[0]);b.type="button";b.setAttribute("aria-pressed","false");
+      var t=el("span","tick");t.innerHTML=TICK;b.append(t,el("span",null,m[1]),el("small",null,m[2]));
+      b.onclick=function(){var e=getE();e[m[0]]=!e[m[0]];b.setAttribute("aria-pressed",String(!!e[m[0]]));onChange()};
+      box.append(b);btns[m[0]]=b;
+    });
+    return btns;
+  }
+  function paintMeasures(btns,e){MEAS.forEach(function(m){btns[m[0]].setAttribute("aria-pressed",String(!!(e&&e[m[0]])))})}
+
+  /* ================= เจ้าของบ้าน ================= */
+  var myBtns=buildMeasures($("myMeasures"),function(){return myEdit()},function(){});
+  function myEdit(){if(!myChecks[selFri])myChecks[selFri]={};return myChecks[selFri]}
+  function renderHome(){
+    $("monthLabel").textContent=TH_M[M]+" "+(Y+543);
+    if(!myNo){$("pickPanel").hidden=false;$("myPanel").hidden=true;return}
+    $("pickPanel").hidden=true;$("myPanel").hidden=false;
+    $("myNo").textContent="บ้านเลขที่ "+myNo;
+    var fs=fridays(),sent=fs.filter(function(f){return reported(myChecks[f])}).length;
+    $("mySum").textContent="· เดือนนี้ส่งแล้ว "+sent+"/"+fs.length+" สัปดาห์";
+    var box=$("myFridays");box.textContent="";
+    fs.forEach(function(f){
+      var s=stateOf(myChecks[f]);var b=el("button","fri");b.type="button";b.setAttribute("aria-pressed",String(f===selFri));
+      var h=el("span","h");var dot=el("span","dot "+(s==="none"?"":s));h.append(dot,{none:"ยังไม่ส่ง",ok:"ครบ ปลอดลูกน้ำ",part:"ส่งแล้ว",bad:"พบลูกน้ำ"}[s]);
+      b.append(el("span","d",friLabel(f)),h);b.onclick=function(){selFri=f;show("myMsg","");renderHome()};box.append(b);
+    });
+    $("myFriLabel").textContent="ผลสำรวจวัน"+friLabel(selFri).replace("ศุกร์","ศุกร์ที่ ")+" "+(Y+543);
+    var e=myChecks[selFri]||{};
+    paintMeasures(myBtns,e);
+    $("myCont").value=e.containers?String(e.containers):"";
+    $("myLarv").value=e.larvae?String(e.larvae):"";
+    var future=selFri>ymd(new Date());
+    $("mySave").disabled=future;$("mySave").textContent=future?"ยังไม่ถึงวันศุกร์นี้":"บันทึกผลวันศุกร์นี้";
+  }
+  function loadHome(no){
+    $("pickBtn").disabled=true;show("pickMsg","");
+    document.body.classList.add("loading");
+    return call("homeData",no,monthKey()).then(function(r){
+      document.body.classList.remove("loading");$("pickBtn").disabled=false;
+      if(!r.found){myNo=null;show("pickMsg","ไม่พบบ้านเลขที่ "+no+" ในรายชื่อ ตรวจการพิมพ์อีกครั้ง หรือแจ้ง อสม. ให้เพิ่มบ้านของคุณ");renderHome();return}
+      myNo=r.no;store("myHouse",myNo);myChecks={};r.checks.forEach(function(c){myChecks[c.friday]=c});renderHome();
+    }).catch(function(err){document.body.classList.remove("loading");$("pickBtn").disabled=false;show("pickMsg","เชื่อมต่อไม่สำเร็จ: "+err)});
+  }
+  $("pickForm").addEventListener("submit",function(e){e.preventDefault();var v=$("houseNo").value.trim();if(v)loadHome(v)});
+  $("changeHouse").onclick=function(){myNo=null;$("houseNo").value="";renderHome();$("houseNo").focus()};
+  $("myCont").oninput=function(){myEdit().containers=Math.max(0,parseInt(this.value,10)||0)};
+  $("myLarv").oninput=function(){myEdit().larvae=Math.max(0,parseInt(this.value,10)||0)};
+  $("mySave").onclick=function(){
+    var e=myEdit();
+    if(!$("myCont").value){show("myMsg","กรุณากรอกจำนวนภาชนะที่สำรวจ (ถ้าไม่มีภาชนะใส่น้ำเลย ใส่ 0)");$("myCont").focus();return}
+    if(!$("myLarv").value){e.larvae=0}
+    var b=$("mySave");b.disabled=true;b.textContent="กำลังบันทึก…";
+    call("homeSave",myNo,selFri,e).then(function(){
+      b.disabled=false;renderHome();
+      var good=Number(e.larvae)===0;
+      show("myMsg",good?"บันทึกแล้ว ขอบคุณค่ะ บ้านของคุณไม่พบลูกน้ำในสัปดาห์นี้":"บันทึกแล้ว พบลูกน้ำ "+e.larvae+" ใบ กรุณาเทน้ำทิ้งหรือปิดฝาภาชนะทันที อสม. จะไปช่วยตรวจวันเสาร์",good);
+      toast("บันทึกแล้ว");
+    }).catch(function(err){b.disabled=false;b.textContent="บันทึกผลวันศุกร์นี้";show("myMsg","บันทึกไม่สำเร็จ: "+err)});
+  };
+
+  /* ================= อสม. ================= */
+  function getE(no){if(!checks[no])checks[no]={};if(!checks[no][selFri])checks[no][selFri]={};return checks[no][selFri]}
+  function entry(no,f){return checks[no]&&checks[no][f]||null}
+  function stats(f){var rep=0,wl=0,c=0,l=0,full=0;houses.forEach(function(h){var e=entry(h.no,f);if(!reported(e))return;rep++;var a=Number(e.containers)||0,b=Number(e.larvae)||0;c+=a;l+=b;if(b>0)wl++;if(MEAS.every(function(m){return e[m[0]]}))full++});return{rep:rep,full:full,hi:rep?wl/rep*100:null,ci:c?l/c*100:null}}
+  function pill(id,v){var p=$(id);if(v===null){p.textContent="เป้าหมาย 0";p.className="pill"}else if(v===0){p.textContent="ผ่านเป้าหมาย 0";p.className="pill ok"}else{p.textContent="ยังไม่ถึงเป้า 0";p.className="pill bad"}}
+  function renderTop(){
+    $("monthLabel").textContent=TH_M[M]+" "+(Y+543);
+    var box=$("admFridays");box.textContent="";
+    fridays().forEach(function(f){var s=stats(f);var b=el("button","fri");b.type="button";b.setAttribute("aria-pressed",String(f===selFri));
+      b.append(el("span","d",friLabel(f)),el("span","h",s.rep?("HI "+fmt(s.hi)+" · "+s.rep+" บ้าน"):"ยังไม่มีรายงาน"));
+      b.onclick=function(){selFri=f;renderAdmin()};box.append(b)});
+    var s=stats(selFri);
+    $("sHI").textContent=fmt(s.hi);$("sCI").textContent=fmt(s.ci);pill("pHI",s.hi);pill("pCI",s.ci);
+    $("sRep").textContent=houses.length?s.rep+"/"+houses.length:"—";
+    $("pRep").textContent=houses.length?"ขาดอีก "+(houses.length-s.rep)+" บ้าน":"ยังไม่มีบ้าน";
+    $("sFull").textContent=s.rep?Math.round(s.full/s.rep*100)+"%":"—";
+  }
+  var ST={none:"ยังไม่รายงาน",ok:"ปลอดลูกน้ำ · ครบ 6 ข้อ",part:"ไม่พบลูกน้ำ · ยังไม่ครบ",bad:"พบลูกน้ำ!"};
+  function buildCard(h){
+    var c=el("article","house"),head=el("div","hhead"),left=el("div"),no=el("span","hno"),nm=el("span","hname"),st=el("span","hstate");
+    left.append(no," ",nm);head.append(left,st);
+    var ms=el("div","measures");var btns=buildMeasures(ms,function(){return getE(h.no)},function(){save(h.no,true)});
+    var counts=el("div","counts");
+    function num(cls,label,key){var w=el("label","num "+cls);var i=el("input");i.type="number";i.min="0";i.inputMode="numeric";
+      i.oninput=function(){getE(h.no)[key]=Math.max(0,parseInt(i.value,10)||0);save(h.no,false)};w.append(label+" ",i," ใบ");counts.append(w);return i}
+    var iC=num("","ภาชนะที่สำรวจ","containers"),iL=num("larva","พบลูกน้ำ","larvae");
+    var v=el("button","vhv");v.type="button";v.onclick=function(){var e=getE(h.no);e.vhv=!e.vhv;save(h.no,true)};counts.append(v);
+    c.append(head,ms,counts);
+    return {el:c,no:no,nm:nm,st:st,btns:btns,iC:iC,iL:iL,v:v};
+  }
+  function paintCard(r,h){
+    var e=entry(h.no,selFri)||{},s=stateOf(entry(h.no,selFri));
+    r.no.textContent="บ้านเลขที่ "+h.no;r.nm.textContent=[h.owner,h.vhv?"อสม. "+h.vhv:""].filter(Boolean).join(" · ");
+    r.el.className="house st-"+s;r.st.textContent=ST[s]+(e.by==="เจ้าของบ้าน"?" · เจ้าของบ้านบันทึก":"");
+    paintMeasures(r.btns,e);
+    if(document.activeElement!==r.iC)r.iC.value=e.containers?String(e.containers):"";
+    if(document.activeElement!==r.iL)r.iL.value=e.larvae?String(e.larvae):"";
+    r.v.setAttribute("aria-pressed",String(!!e.vhv));r.v.textContent=e.vhv?"✓ อสม. ตรวจแล้ว":"อสม. ตรวจ (เสาร์)";
+    return s;
+  }
+  function renderList(){
+    var list=$("list"),q=query.trim().toLowerCase(),seen={};
+    $("emptyMsg").hidden=houses.length>0;
+    houses.forEach(function(h){seen[h.no]=1;var r=cards[h.no]||(cards[h.no]=buildCard(h));var s=paintCard(r,h);
+      var txt=(h.no+" "+h.owner+" "+h.vhv).toLowerCase();
+      var okF=filter==="all"||(filter==="none"&&s==="none")||(filter==="bad"&&s==="bad")||(filter==="ok"&&(s==="ok"||s==="part"));
+      r.el.hidden=!(okF&&(!q||txt.indexOf(q)>=0));list.append(r.el)});
+    Object.keys(cards).forEach(function(k){if(!seen[k]){cards[k].el.remove();delete cards[k]}});
+  }
+  function renderDel(){
+    var box=$("delList");box.textContent="";
+    houses.forEach(function(h){var r=el("div","del-row");var b=el("button",null,"ลบ");b.type="button";
+      b.onclick=function(){if(!b.classList.contains("confirm")){b.classList.add("confirm");b.textContent="กดอีกครั้งเพื่อลบ";setTimeout(function(){b.classList.remove("confirm");b.textContent="ลบ"},3000);return}
+        call("adminDeleteHouse",pin,h.no).then(function(){toast("ลบบ้านเลขที่ "+h.no+" แล้ว");loadAdmin()}).catch(function(e){toast(e)})};
+      r.append(el("span",null,h.no+(h.owner?" · "+h.owner:"")),b);box.append(r)});
+  }
+  function renderAdmin(){renderTop();renderList();renderDel()}
+  function save(no,now){
+    renderTop();var h=houses.find(function(x){return x.no===no});if(cards[no]&&h)paintCard(cards[no],h);
+    var f=selFri;clearTimeout(timers[no+f]);
+    var go=function(){delete timers[no+f];call("adminSave",pin,no,f,checks[no][f]).catch(function(e){toast("บันทึกไม่สำเร็จ: "+e)})};
+    if(now)go();else timers[no+f]=setTimeout(go,700);
+  }
+  function loadAdmin(){
+    document.body.classList.add("loading");
+    return call("adminData",pin,monthKey()).then(function(r){
+      document.body.classList.remove("loading");
+      houses=r.houses.sort(function(a,b){return a.no.localeCompare(b.no,"th",{numeric:true})});
+      checks={};r.checks.forEach(function(c){(checks[c.no]=checks[c.no]||{})[c.friday]=c});
+      if(r.sheetUrl){$("sheetLink").href=r.sheetUrl;$("sheetLink").hidden=false}else{$("sheetLink").removeAttribute("href");$("sheetLink").hidden=true}
+      $("roleBadge").textContent=r.role==="staff"?"เข้าสู่ระบบในฐานะ: เจ้าหน้าที่":"เข้าสู่ระบบในฐานะ: อสม.";
+      $("loginPanel").hidden=true;$("dash").hidden=false;renderAdmin();
+    }).catch(function(err){document.body.classList.remove("loading");pin=null;$("loginPanel").hidden=false;$("dash").hidden=true;show("loginMsg",err)});
+  }
+  $("loginForm").addEventListener("submit",function(e){e.preventDefault();pin=$("pin").value.trim();if(pin){show("loginMsg","");loadAdmin()}});
+  $("logout").onclick=function(){pin=null;$("pin").value="";setMode("home")};
+  $("q").oninput=function(){query=this.value;renderList()};
+  [].forEach.call(document.querySelectorAll(".chip"),function(c){c.onclick=function(){filter=c.dataset.f;[].forEach.call(document.querySelectorAll(".chip"),function(x){x.setAttribute("aria-pressed",String(x===c))});renderList()}});
+  function addRows(rows){return call("adminAddHouses",pin,rows).then(function(r){toast("เพิ่มแล้ว "+r.added+" บ้าน"+(r.skipped?" · ข้ามที่ซ้ำ "+r.skipped:""));return loadAdmin()}).catch(function(e){toast(e)})}
+  $("addOne").addEventListener("submit",function(e){e.preventDefault();var no=$("fNo").value.trim();if(!no)return;addRows([{no:no,owner:$("fName").value.trim(),vhv:$("fVhv").value.trim()}]).then(function(){$("fNo").value="";$("fName").value=""})});
+  $("addMany").addEventListener("submit",function(e){e.preventDefault();var rows=$("fMany").value.split(/\r?\n/).map(function(l){return l.split(/\t|,/).map(function(s){return s.trim()})}).filter(function(p){return p[0]}).map(function(p){return{no:p[0],owner:p[1]||"",vhv:p[2]||""}});if(rows.length)addRows(rows).then(function(){$("fMany").value=""})});
+
+  /* ================= โหมด / เดือน ================= */
+  function setMode(m){mode=m;$("homeView").hidden=m!=="home";$("adminView").hidden=m!=="admin";$("modeBtn").textContent=m==="home"?"สำหรับ อสม. / เจ้าหน้าที่":"กลับหน้าเจ้าของบ้าน";if(m==="home")renderHome();else if(pin)loadAdmin();else{$("loginPanel").hidden=false;$("dash").hidden=true;$("monthLabel").textContent=TH_M[M]+" "+(Y+543)}}
+  $("modeBtn").onclick=function(){setMode(mode==="home"?"admin":"home")};
+  function changeMonth(d){M+=d;if(M<0){M=11;Y--}if(M>11){M=0;Y++}pickFri();if(mode==="home"){if(myNo)loadHome(myNo);else renderHome()}else if(pin)loadAdmin();else $("monthLabel").textContent=TH_M[M]+" "+(Y+543)}
+  $("prevM").onclick=function(){changeMonth(-1)};$("nextM").onclick=function(){changeMonth(1)};
+
+  pickFri();renderHome();
+  function start(param){var no=param||store("myHouse");if(no){$("houseNo").value=no;loadHome(no)}}
+  if(window.google&&google.script&&google.script.url){google.script.url.getLocation(function(loc){start(loc.parameter&&loc.parameter.house)})}else start(null);
+})();
+</script>
+</body>
+</html>
