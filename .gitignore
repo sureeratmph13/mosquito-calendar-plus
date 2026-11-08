@@ -1,0 +1,18 @@
+# Local credentials and configuration
+.env
+.env.*
+!.env.example
+.clasp.json
+.clasprc.json
+*credentials*.json
+*service-account*.json
+*.pem
+*.key
+# Local data and backups
+data/
+exports/
+backups/
+*.csv
+*.xlsx
+*.zip
+node_modules/
